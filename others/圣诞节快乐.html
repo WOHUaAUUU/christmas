@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>圣诞快乐</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            background-image: url('sd_background.jpg'); /* 设置远程背景图片 */
+            background-size: cover; /* 让背景图片自适应 */
+            background-position: center; /* 背景图片居中显示 */
+            background-repeat: no-repeat; /* 背景图片不重复 */
+            overflow: hidden;
+        }
+        .tree {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 1500px;
+            height: 900px;
+            
+            background: url('christmas-tree.png') no-repeat center bottom;
+            background-size: contain; /* 确保图片按比例缩放并适应容器 */
+        }
+        .snowflake {
+            position: absolute;
+            top: -10px;
+            color: #fff;
+            font-size: 1em;
+            user-select: none;
+            z-index: 1000;
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+    <audio autoplay loop>
+        <source src="christmas-song.mp3" type="audio/mp3">
+        您的浏览器不支持 audio 元素。
+    </audio>
+    <div class="tree"></div>
+    <script>
+        function createSnowflake() {
+            const snowflake = document.createElement('div');
+            snowflake.classList.add('snowflake');
+            snowflake.textContent = '❄';
+            snowflake.style.left = Math.random() * window.innerWidth + 'px';
+            snowflake.style.animationName = 'fall';
+            snowflake.style.animationDuration = Math.random() * 3 + 2 + 's';
+            snowflake.style.animationTimingFunction = 'linear';
+            snowflake.style.animationIterationCount = 'infinite';
+            document.body.appendChild(snowflake);
+
+            snowflake.addEventListener('animationend', function() {
+                snowflake.parentElement.removeChild(snowflake);
+            });
+        }
+
+        setInterval(createSnowflake, 300);
+
+        const style = document.createElement('style');
+        style.innerHTML = `
+            @keyframes fall {
+                0% { top: -10px; }
+                100% { top: 100%; }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

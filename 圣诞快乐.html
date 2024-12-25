@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>圣诞快乐</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            background-image: url('sd_background.jpg'); /* 设置远程背景图片 */
+            background-size: cover; /* 让背景图片自适应 */
+            background-position: center; /* 背景图片居中显示 */
+            background-repeat: no-repeat; /* 背景图片不重复 */
+            overflow: hidden;
+        }
+        .tree {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 1800px;
+            height: 1200px;
+            
+            background: url('christmas-tree.png') no-repeat center bottom;
+            background-size: contain; /* 确保图片按比例缩放并适应容器 */
+        }
+        .snowflake, .merry-christmas {
+            position: absolute;
+            top: -10px;
+            color: #fff;
+            font-size: 1em;
+            user-select: none;
+            z-index: 1000;
+            opacity: 0.8;
+        }
+        .merry-christmas {
+            font-size: 2em;
+            font-weight: bold;
+            color: #FDD55D;//祝福语颜色red，golden
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+.present {
+            position: absolute;
+            top: -50px; /* 初始位置在页面顶部以外 */
+            width: 50px;
+            height: 50px;
+            background: url('present.png') no-repeat center center;
+            background-size: contain;
+        }
+.audio-control {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            width: 30px;
+            height: 30px;
+            background: url('speaker.png') no-repeat center center; /* 喇叭图标的图片 */
+            background-size: contain;
+            cursor: pointer;
+            z-index: 1001;
+        }
+
+.snowflake, .merry-christmas, .present {
+            position: absolute;
+            will-change: transform; /* 优化动画性能 */
+        }
+        @keyframes fall {
+            0% { transform: translateY(-10px); }
+            100% { transform: translateY(100%); }
+        }
+
+    </style>
+</head>
+<body>
+<audio id="bg-music" loop>
+        <source src="christmas-song.mp3" type="audio/mp3">
+        您的浏览器不支持 audio 元素。
+    </audio>
+    <div class="tree"></div>
+    <div class="audio-control" id="audio-control"></div>
+    <script>
+        function createSnowflake() {
+            const snowflake = document.createElement('div');
+            snowflake.classList.add('snowflake');
+            snowflake.textContent = '❄';
+            snowflake.style.left = Math.random() * window.innerWidth + 'px';
+            snowflake.style.animationName = 'fall';
+            snowflake.style.animationDuration = Math.random() * 3 + 2 + 's';
+            snowflake.style.animationTimingFunction = 'linear';
+            snowflake.style.animationIterationCount = 'infinite';
+            document.body.appendChild(snowflake);
+
+            snowflake.addEventListener('animationend', function() {
+                snowflake.parentElement.removeChild(snowflake);
+            });
+        }
+
+// 获取音乐元素和控制按钮元素
+        const bgMusic = document.getElementById('bg-music');
+        const audioControl = document.getElementById('audio-control');
+
+        // 默认关闭背景音乐
+        bgMusic.muted = true;
+
+        // 点击控制按钮时切换音乐播放状态
+        audioControl.addEventListener('click', function() {
+            if (bgMusic.paused) {
+                bgMusic.play().catch(error => {
+                    // 用户没有与页面进行交互，无法播放音频
+                    console.error("无法播放音频，用户需要与页面进行交互。", error);
+                });
+                bgMusic.muted = false;
+                audioControl.style.backgroundImage = "url('speaker-on.png')"; // 假设您有一个喇叭开启的图标
+            } else {
+                bgMusic.pause();
+                bgMusic.muted = true;
+                audioControl.style.backgroundImage = "url('speaker.png')"; // 假设您有一个喇叭关闭的图标
+            }
+        });
+      const FIXED_ANIMATION_DURATION = '15s'; //按照固定的频率进行掉落
+
+        function createMerryChristmas() {
+            const merryChristmas = document.createElement('div');
+            merryChristmas.classList.add('merry-christmas');
+            merryChristmas.textContent = '圣诞快乐';
+            merryChristmas.style.left = Math.random() * window.innerWidth + 'px';
+            merryChristmas.style.animationName = 'fall';
+            merryChristmas.style.animationDuration = FIXED_ANIMATION_DURATION;
+            merryChristmas.style.animationTimingFunction = 'linear';
+            merryChristmas.style.animationIterationCount = 'infinite';
+            merryChristmas.style.opacity = Math.random() * 0.5 + 0.5; // 设置随机透明度
+            document.body.appendChild(merryChristmas);
+
+            merryChristmas.addEventListener('animationend', function() {
+                merryChristmas.parentElement.removeChild(merryChristmas);
+            });
+        }
+
+const FIXED_ANIMATION_DURATION1 = '18s'
+
+        function createPresent() {
+            const present = document.createElement('div');
+            present.classList.add('present');
+            const side = Math.random() > 0.5 ? 'left' : 'right';
+            if (side === 'left') {
+                present.style.left = '0px'; // 从左侧开始
+            } else {
+                present.style.right = '0px'; // 从右侧开始
+            }
+            present.style.animationName = 'fall';
+            present.style.animationDuration = '18s';
+            present.style.animationTimingFunction = 'linear';
+            present.style.animationIterationCount = 'infinite';
+            document.body.appendChild(present);
+
+            present.addEventListener('animationend', function() {
+                present.parentElement.removeChild(present);
+            });
+        }
+
+        // 分别设置
+        setInterval(createSnowflake, 500); // 雪花落下频率
+        setInterval(createMerryChristmas, 2600); // 文字落下频率
+        setInterval(createPresent, 1800);//礼物盒落下速度
+
+        const style = document.createElement('style');
+        style.innerHTML = `
+            @keyframes fall {
+                0% { top: -10px; }
+                100% { top: 100%; }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
